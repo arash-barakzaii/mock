@@ -1,7 +1,7 @@
-import type { Product } from './types';
+import type { UiProduct } from './types';
 
 interface Props {
-  product: Product;
+  product: UiProduct;
   onClose: () => void;
 }
 
@@ -12,28 +12,26 @@ export const ProductDetail = ({ product, onClose }: Props) => {
         <button className="modal-close" onClick={onClose}>×</button>
         
         <div className="detail-content">
-          <img 
-            src={product.imageUrl} 
-            alt={product.name} 
-            className="detail-image"
-            onError={(e) => (e.currentTarget.style.display = 'none')}
-          />
+          {product.imageUrl && (
+            <img 
+              src={product.imageUrl} 
+              alt={product.title} 
+              className="detail-image"
+              onError={(e) => (e.currentTarget.style.display = 'none')}
+            />
+          )}
           
           <div className="detail-info">
-            <span className="detail-type">{product.itemType}</span>
-            <h2>{product.name}</h2>
-            <p className="detail-price">€{product.price?.toFixed(2)}</p>
+            <span className="detail-type">{product.category}</span>
+            <h2>{product.title}</h2>
+            <p className="detail-price">€{product.price.toFixed(2)}</p>
             
             {product.description && (
               <p className="detail-description">{product.description}</p>
             )}
             
-            {product.manufacturer && (
-              <p className="detail-manufacturer">By {product.manufacturer}</p>
-            )}
-            
             <div className="tags">
-              {product.tags?.map(tag => (
+              {product.tags.map(tag => (
                 <span key={tag} className="tag">{tag}</span>
               ))}
             </div>

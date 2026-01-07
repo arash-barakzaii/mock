@@ -1,8 +1,8 @@
-import type { Product } from './types';
+import type { UiProduct } from './types';
 import { useState } from 'react';
 
 interface Props {
-  product: Product;
+  product: UiProduct;
   onClick: () => void;
 }
 
@@ -11,10 +11,10 @@ export const ProductCard = ({ product, onClick }: Props) => {
 
   return (
     <div className="product-card" onClick={onClick}>
-      {!imgError ? (
+      {!imgError && product.imageUrl ? (
         <img 
           src={product.imageUrl} 
-          alt={product.name} 
+          alt={product.title} 
           className="product-image"
           onError={() => setImgError(true)}
         />
@@ -22,11 +22,11 @@ export const ProductCard = ({ product, onClick }: Props) => {
         <div className="product-image-placeholder">🖼️</div>
       )}
       <div className="product-info">
-        <span className="product-type">{product.itemType}</span>
-        <h3>{product.name}</h3>
-        <p className="price">€{product.price?.toFixed(2)}</p>
+        <span className="product-type">{product.category}</span>
+        <h3>{product.title}</h3>
+        <p className="price">€{product.price.toFixed(2)}</p>
         <div className="tags">
-          {product.tags?.slice(0, 2).map(tag => (
+          {product.tags.slice(0, 2).map(tag => (
             <span key={tag} className="tag">{tag}</span>
           ))}
         </div>

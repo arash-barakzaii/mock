@@ -1,12 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { Product, ProductsState } from './types';
+import type { UiProduct, ProductsState } from './types';
+import { mapProducts } from './product.adapter';
 
 const API_URL = 'http://localhost:3001';
 
 export const fetchProducts = createAsyncThunk('products/fetch', async () => {
   const res = await fetch(`${API_URL}/items`);
-  return res.json();
+  const rawData = await res.json();
+  return mapProducts(rawData);  // ← Adapter nutzen!
 });
 
 const initialState: ProductsState = {
@@ -14,9 +16,9 @@ const initialState: ProductsState = {
   loading: false,
   error: null,
   searchTerm: '',
-  sortBy: 'name',
-  tagFilter: null,        // NEU
-  selectedProduct: null,  // NEU
+  sortBy: 'title',
+  tagFilter: null,
+  selectedProduct: null,
 };
 
 const productsSlice = createSlice({
@@ -26,13 +28,13 @@ const productsSlice = createSlice({
     setSearchTerm: (state, action: PayloadAction<string>) => {
       state.searchTerm = action.payload;
     },
-    setSortBy: (state, action: PayloadAction<'name' | 'price-asc' | 'price-desc'>) => {
+    setSortBy: (state, action: PayloadAction<'title' | 'price-asc' | 'price-desc'>) => {
       state.sortBy = action.payload;
     },
     setTagFilter: (state, action: PayloadAction<string | null>) => {
       state.tagFilter = action.payload;
     },
-    setSelectedProduct: (state, action: PayloadAction<Product | null>) => {
+    setSelectedProduct: (state, action: PayloadAction<UiProduct | null>) => {
       state.selectedProduct = action.payload;
     },
   },

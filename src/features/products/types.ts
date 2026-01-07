@@ -1,21 +1,20 @@
-export interface Product {
-  name: string;
-  slug?: string;
-  description?: string;
+// UI-Modell - bleibt IMMER gleich!
+export interface UiProduct {
+  id: string;
+  title: string;
   price: number;
   imageUrl?: string;
-  tags?: string[];
-  manufacturer?: string;
-  itemType?: string;
-  [key: string]: any;
+  tags: string[];
+  category?: string;
+  description?: string;
 }
 
 export interface ProductsState {
-  items: Product[];
+  items: UiProduct[];
   loading: boolean;
   error: string | null;
   searchTerm: string;
-  sortBy: 'name' | 'price-asc' | 'price-desc';
+  sortBy: 'title' | 'price-asc' | 'price-desc';
   tagFilter: string | null;
-  selectedProduct: Product | null;
+  selectedProduct: UiProduct | null;
 }

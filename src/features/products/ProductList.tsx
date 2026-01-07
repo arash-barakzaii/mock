@@ -17,23 +17,20 @@ export const ProductList = () => {
   const filtered = useMemo(() => {
     let result = [...items];
     
-    // Tag Filter
     if (tagFilter) {
-      result = result.filter(p => p.tags?.includes(tagFilter));
+      result = result.filter(p => p.tags.includes(tagFilter));
     }
     
-    // Search
     if (searchTerm) {
       result = result.filter(p => 
-        p.name.toLowerCase().includes(searchTerm.toLowerCase())
+        p.title.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
     
-    // Sort
     result.sort((a, b) => {
-      if (sortBy === 'name') return a.name.localeCompare(b.name);
-      if (sortBy === 'price-asc') return (a.price || 0) - (b.price || 0);
-      if (sortBy === 'price-desc') return (b.price || 0) - (a.price || 0);
+      if (sortBy === 'title') return a.title.localeCompare(b.title);
+      if (sortBy === 'price-asc') return a.price - b.price;
+      if (sortBy === 'price-desc') return b.price - a.price;
       return 0;
     });
     
@@ -46,25 +43,21 @@ export const ProductList = () => {
   return (
     <div className="products-page">
       <ProductFilters />
-      
       <p className="results-count">{filtered.length} products found</p>
-      
       <div className="products-grid">
-        {filtered.slice(0, limit).map((p, i) => (
+        {filtered.slice(0, limit).map(p => (
           <ProductCard 
-            key={p.slug || i} 
+            key={p.id} 
             product={p} 
             onClick={() => dispatch(setSelectedProduct(p))}
           />
         ))}
       </div>
-
       {limit < filtered.length && (
         <button className="load-more" onClick={() => setLimit(l => l + 12)}>
           Load More ({filtered.length - limit} remaining)
         </button>
       )}
-
       {selectedProduct && (
         <ProductDetail 
           product={selectedProduct} 
